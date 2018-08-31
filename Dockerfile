@@ -1,3 +1,3 @@
-FROM mysql
+FROM mysql:latest
 MAINTAINER MAINTAINER "Michael Thorsager <thorsager@gmail.com>"
 COPY from-env.sh /docker-entrypoint-initdb.d/
