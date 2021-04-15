@@ -3,35 +3,22 @@ name: publish
 on: [push]
 
 jobs:
-  pushing-mysql-images:
+  pushing-mysql-5-images:
     runs-on: ubuntu-latest
+    env:
+      PAT: ${{ secrets.PAT }}
+      IMAGE_NAME: ghcr.io/thorsager/quick-mysql
+      IMAGE_TAG: 8
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build :latest image
+    - name: Build image
       run: |
-        echo $PAT | docker login ghcr.io -u thorsager --password-stdin
-        docker build . --build-arg MYSQL_TAG=latest --tag ${IMAGE_NAME}:latest
-        docker push ${IMAGE_NAME}:latest
-      env:
-        PAT: ${{ secrets.PAT }}
-        IMAGE_NAME: ghcr.io/thorsager/quick-mysql
+        docker build . --build-arg "MYSQL_TAG=${IMAGE_TAG}" --tag "${IMAGE_NAME}:${IMAGE_TAG}"
 
-    - name: Build :5 image
+    - name: Push image 
       run: |
         echo $PAT | docker login ghcr.io -u thorsager --password-stdin
-        docker build . --build-arg MYSQL_TAG=5 --tag ${IMAGE_NAME}:5
-        docker push ${IMAGE_NAME}:5
-      env:
-        PAT: ${{ secrets.PAT }}
-        IMAGE_NAME: ghcr.io/thorsager/quick-mysql
+        docker push "${IMAGE_NAME}:${IMAGE_TAG}"
 
-    - name: Build :8 image
-      run: |
-        echo $PAT | docker login ghcr.io -u thorsager --password-stdin
-        docker build . --build-arg MYSQL_TAG=8 --tag ${IMAGE_NAME}:8
-        docker push ${IMAGE_NAME}:8
-      env:
-        PAT: ${{ secrets.PAT }}
-        IMAGE_NAME: ghcr.io/thorsager/quick-mysql
