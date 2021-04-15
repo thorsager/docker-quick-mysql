@@ -11,9 +11,9 @@ way, and in addition to, the database in `MYSQL_DATABASE` is.
 
 ```
 docker run 
- -e MYSQL_ROOT=changeme
- -e MYSQL_USER=joe
- -e MYSQL_PASSWORD=dalton
+ -e MYSQL_ROOT_MASSWORD=changeme \
+ -e MYSQL_USER=joe \
+ -e MYSQL_PASSWORD=dalton \
  -e MYSQL_DATABASES=development,staging \
  ghcr.io/thorsager/quick-mysql
 ```
