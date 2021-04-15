@@ -1,0 +1,19 @@
+name: publish
+
+on: [push]
+
+jobs:
+  publish-hello-world-image:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build docker images
+      run: |
+        echo $PAT | docker login ghcr.io -u thorsager --password-stdin
+        docker build . --tag ${IMAGE_NAME}:latest
+        docker push ${IMAGE_NAME}:latest
+      env:
+        PAT: ${{ secrets.PAT }}
+        IMAGE_NAME: ghrc.io/thorsager/quick-mysql
