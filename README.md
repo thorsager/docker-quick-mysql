@@ -15,6 +15,6 @@ docker run
  -e MYSQL_USER=joe
  -e MYSQL_PASSWORD=dalton
  -e MYSQL_DATABASES=development,staging \
- thorsager/quick-mysql
+ ghcr.io/thorsager/quick-mysql
 ```
 
