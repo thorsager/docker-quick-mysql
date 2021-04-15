@@ -21,7 +21,7 @@ jobs:
     - name: Build :5 image
       run: |
         echo $PAT | docker login ghcr.io -u thorsager --password-stdin
-        docker build . --build-arg=5 --tag ${IMAGE_NAME}:5
+        docker build . --build-arg MYSQL_TAG=5 --tag ${IMAGE_NAME}:5
         docker push ${IMAGE_NAME}:5
       env:
         PAT: ${{ secrets.PAT }}
@@ -30,7 +30,7 @@ jobs:
     - name: Build :8 image
       run: |
         echo $PAT | docker login ghcr.io -u thorsager --password-stdin
-        docker build . --build-arg=8 --tag ${IMAGE_NAME}:8
+        docker build . --build-arg MYSQL_TAG=8 --tag ${IMAGE_NAME}:8
         docker push ${IMAGE_NAME}:8
       env:
         PAT: ${{ secrets.PAT }}
