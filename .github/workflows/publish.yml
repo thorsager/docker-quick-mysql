@@ -2,7 +2,6 @@ name: publish
 
 on:
   schedule:
-    branches:
     - cron: '0 6 * * SUN'
   push:
     branches:

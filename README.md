@@ -1,6 +1,6 @@
 Quick-MySQL
 ===========
-This is noting but a minor addition to the [official](https://hub.docker.com/r/_/mysql/)
+This is noting but a minor addition to the [official](https://hub.docker.com/_/mysql)
 MySQL image. For quick and dirty configuration during development and testing
 
 All this does is introduce a new `ENV` var called `MYSQL_DATABASES`. This var
