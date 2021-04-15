@@ -3,17 +3,35 @@ name: publish
 on: [push]
 
 jobs:
-  publish-hello-world-image:
+  pushing-mysql-images:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build docker images
+    - name: Build :latest image
       run: |
         echo $PAT | docker login ghcr.io -u thorsager --password-stdin
-        docker build . --tag ${IMAGE_NAME}:latest
+        docker build . --build-arg=latest --tag ${IMAGE_NAME}:latest
         docker push ${IMAGE_NAME}:latest
+      env:
+        PAT: ${{ secrets.PAT }}
+        IMAGE_NAME: ghcr.io/thorsager/quick-mysql
+
+    - name: Build :5 image
+      run: |
+        echo $PAT | docker login ghcr.io -u thorsager --password-stdin
+        docker build . --build-arg=5 --tag ${IMAGE_NAME}:5
+        docker push ${IMAGE_NAME}:5
+      env:
+        PAT: ${{ secrets.PAT }}
+        IMAGE_NAME: ghcr.io/thorsager/quick-mysql
+
+    - name: Build :8 image
+      run: |
+        echo $PAT | docker login ghcr.io -u thorsager --password-stdin
+        docker build . --build-arg=8 --tag ${IMAGE_NAME}:8
+        docker push ${IMAGE_NAME}:8
       env:
         PAT: ${{ secrets.PAT }}
         IMAGE_NAME: ghcr.io/thorsager/quick-mysql
