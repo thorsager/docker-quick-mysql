@@ -16,4 +16,4 @@ jobs:
         docker push ${IMAGE_NAME}:latest
       env:
         PAT: ${{ secrets.PAT }}
-        IMAGE_NAME: ghrc.io/thorsager/quick-mysql
+        IMAGE_NAME: ghcr.io/thorsager/quick-mysql
