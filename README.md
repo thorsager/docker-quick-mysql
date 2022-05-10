@@ -37,6 +37,13 @@ done as follows:
 docker exec my-mysql truncate-all.sh -i flyway_history_schema
 ```
 
+If it required that some schema emptied, this ca be done using the `-r` option on
+the `truncate-all.sh` script, which will drop *all* tables in the schemas passed:
+```bash
+docker exec my-mysql truncate-all.sh -r schema-name -i flyway_history_schema
+```
+The above command will truncate all tables in all database, except the `fly_history_schema`
+table, *and* drop all tables in the `schema-name` schema
 
 Contributed
 -----------
