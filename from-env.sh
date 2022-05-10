@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-if [ ! -z "$MYSQL_DATABASES" ]; then 
+if [ -n "$MYSQL_DATABASES" ]; then
 	readarray -td, a <<< "$MYSQL_DATABASES"
 
-	mysql_note "********* quck-init ***********"
+	mysql_note "********* quick-init ***********"
 	for db in "${a[@]}"; do 
 		db_name=${db//[$'\n' ]/}
 		mysql_note "Create and grant for $MYSQL_USER on $db_name"
