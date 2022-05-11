@@ -7,13 +7,14 @@ usage() {
   echo "                              defaults to MYSQL_DATABASES ($MYSQL_DATABASES)" 1>&2
   echo "     -r <databases>           Databases (coma separated list) of which to drop all tables" 1>&2
   echo "     -i <tables>              Names of tables (coma separated list) which NOT to truncate" 1>&2
+  echo "     -v                       Verbose, some more output." 1>&2
   echo "     -s                       Silent, no output." 1>&2
 }
 
 # Default
 TRUNCATE_DATABASES=$MYSQL_DATABASES
 
-while getopts ":hsr:d:i:" opt; do
+while getopts ":hsvr:d:i:" opt; do
   case ${opt} in
   i)
     IGNORING=${OPTARG}
@@ -26,6 +27,9 @@ while getopts ":hsr:d:i:" opt; do
     ;;
   s)
     SILENT=true
+    ;;
+  v)
+    VERBOSE=true
     ;;
   h)
     usage
@@ -66,6 +70,13 @@ if [ -n "$DROP_DATABASES" ]; then
   DROP_SQL="SELECT CONCAT('DROP TABLE ',table_schema,'.',table_name,';') FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('$DROP_DATABASES');"
 fi
 
-echo "SQL: $TRUNCATE_SQL $DROP_SQL"
+BUILD_SQL=$(MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -sN -e "$TRUNCATE_SQL $DROP_SQL")
+
+if [ -n "$VERBOSE" ]; then
+  echo "* Select for Truncate: $TRUNCATE_SQL"
+  echo "* Select for Drop: $DROP_SQL"
+  echo "* Job SQL: $BUILD_SQL"
+fi
+
 MYSQL_PWD=${MYSQL_ROOT_PASSWORD} \
-  mysql -sN -e "SET FOREIGN_KEY_CHECKS=0; $(MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -sN -e "$TRUNCATE_SQL $DROP_SQL") SET FOREIGN_KEY_CHECKS=1;"
+  mysql -sN -e "SET FOREIGN_KEY_CHECKS=0; $BUILD_SQL SET FOREIGN_KEY_CHECKS=1;"
