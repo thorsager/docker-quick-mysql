@@ -21,11 +21,11 @@ jobs:
     - name: Prepare
       id: prep
       run: |
-        echo ::set-output name=tags::${IMAGE_NAME}:${GITHUB_REF/refs\/tags\//}
+        echo ::set-output name=tags::${IMAGE_NAME}:${IMAGE_TAG}-${GITHUB_REF/refs\/tags\//}
 
     - name: Build image
       run: |
-        docker build . --build-arg "MYSQL_TAG=${IMAGE_TAG}" --tag "${IMAGE_NAME}:${IMAGE_TAG}-${{ steps.prep.outputs.tags }}"
+        docker build . --build-arg "MYSQL_TAG=${IMAGE_TAG}" --tag "${{ steps.prep.outputs.tags }}"
 
     - name: Push image 
       run: |
@@ -45,11 +45,11 @@ jobs:
     - name: Prepare
       id: prep
       run: |
-        echo ::set-output name=tags::${IMAGE_NAME}:${GITHUB_REF/refs\/tags\//}
+        echo ::set-output name=tags::${IMAGE_NAME}:${IMAGE_TAG}-${GITHUB_REF/refs\/tags\//}
 
     - name: Build image
       run: |
-        docker build . --build-arg "MYSQL_TAG=${IMAGE_TAG}" --tag "${IMAGE_NAME}:${IMAGE_TAG}-${{ steps.prep.outputs.tags }}"
+        docker build . --build-arg "MYSQL_TAG=${IMAGE_TAG}" --tag "${{ steps.prep.outputs.tags }}"
 
     - name: Push image 
       run: |
