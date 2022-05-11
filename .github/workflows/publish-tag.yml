@@ -1,0 +1,57 @@
+name: publish-on-tag
+
+on:
+  push:
+    branches-ignore:
+      - '**'
+    tags:
+      - 'v*'
+
+jobs:
+  publish-mysql-8-image:
+    runs-on: ubuntu-latest
+    env:
+      PAT: ${{ secrets.PAT }}
+      IMAGE_NAME: ghcr.io/thorsager/quick-mysql
+      IMAGE_TAG: 8
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Prepare
+      id: prep
+      run: |
+        echo ::set-output name=tags::${IMAGE_NAME}:${GITHUB_REF/refs\/tags\//}
+
+    - name: Build image
+      run: |
+        docker build . --build-arg "MYSQL_TAG=${IMAGE_TAG}" --tag "${IMAGE_NAME}:${IMAGE_TAG}-${{ steps.prep.outputs.tags }}"
+
+    - name: Push image 
+      run: |
+        echo $PAT | docker login ghcr.io -u thorsager --password-stdin
+        docker push "${IMAGE_NAME}:${IMAGE_TAG}-${{ steps.prep.outputs.tags }}"
+
+  publish-mysql-5-image:
+    runs-on: ubuntu-latest
+    env:
+      PAT: ${{ secrets.PAT }}
+      IMAGE_NAME: ghcr.io/thorsager/quick-mysql
+      IMAGE_TAG: 5 
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Prepare
+      id: prep
+      run: |
+        echo ::set-output name=tags::${IMAGE_NAME}:${GITHUB_REF/refs\/tags\//}
+
+    - name: Build image
+      run: |
+        docker build . --build-arg "MYSQL_TAG=${IMAGE_TAG}" --tag "${IMAGE_NAME}:${IMAGE_TAG}-${{ steps.prep.outputs.tags }}"
+
+    - name: Push image 
+      run: |
+        echo $PAT | docker login ghcr.io -u thorsager --password-stdin
+        docker push "${IMAGE_NAME}:${IMAGE_TAG}-${{ steps.prep.outputs.tags }}"
