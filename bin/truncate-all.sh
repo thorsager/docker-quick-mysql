@@ -70,7 +70,7 @@ if [ -n "$DROP_DATABASES" ]; then
   DROP_SQL="SELECT CONCAT('DROP TABLE ',table_schema,'.',table_name,';') FROM information_schema.TABLES WHERE TABLE_SCHEMA IN ('$DROP_DATABASES');"
 fi
 
-BUILD_SQL=$(MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -sN -e "$TRUNCATE_SQL $DROP_SQL")
+BUILD_SQL=$(MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -u root -sN -e "$TRUNCATE_SQL $DROP_SQL")
 
 if [ -n "$VERBOSE" ]; then
   echo "* Select for Truncate: $TRUNCATE_SQL"
@@ -78,5 +78,4 @@ if [ -n "$VERBOSE" ]; then
   echo "* Job SQL: $BUILD_SQL"
 fi
 
-MYSQL_PWD=${MYSQL_ROOT_PASSWORD} \
-  mysql -sN -e "SET FOREIGN_KEY_CHECKS=0; $BUILD_SQL SET FOREIGN_KEY_CHECKS=1;"
+MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -u root -sN -e "SET FOREIGN_KEY_CHECKS=0; $BUILD_SQL SET FOREIGN_KEY_CHECKS=1;"
